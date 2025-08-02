@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "post")
 @EntityListeners(AuditingEntityListener.class)
-public class CommunityPost {
+public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
@@ -37,8 +37,8 @@ public class CommunityPost {
     private User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<CommunityComment> comments = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    private List<CommunityLike> likes = new ArrayList<>();
+    private List<PostLike> likes = new ArrayList<>();
 }

@@ -55,36 +55,5 @@ public class User {
 
     // 연관관계
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<CommunityPost> communityPosts = new ArrayList<>();
-}
-
-// CommunityPostLike.java (복합키 엔티티)
-@Entity
-@Table(name = "community_post_likes")
-public class CommunityPostLike {
-    @EmbeddedId
-    private CommunityPostLikeId id;
-
-    @ManyToOne
-    @MapsId("userId")
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne
-    @MapsId("postId")
-    @JoinColumn(name = "post_id")
-    private CommunityPost post;
-
-    @CreatedDate
-    @Column(name = "liked_at")
-    private LocalDateTime likedAt;
-}
-
-@Embeddable
-public class CommunityPostLikeId implements Serializable {
-    @Column(name = "user_id")
-    private Long userId;
-
-    @Column(name = "post_id")
-    private Long postId;
+    private List<Post> posts = new ArrayList<>();
 }

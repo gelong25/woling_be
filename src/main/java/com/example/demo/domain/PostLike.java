@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "post_like")
 @EntityListeners(AuditingEntityListener.class)
-public class CommunityLike {
+public class PostLike {
     @EmbeddedId
-    private CommunityLikeId id;
+    private PostLikeId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userId")
@@ -23,7 +23,7 @@ public class CommunityLike {
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("postId")
     @JoinColumn(name = "post_id")
-    private CommunityPost post;
+    private Post post;
 
     @CreatedDate
     @Column(name = "liked_at")
@@ -35,7 +35,7 @@ public class CommunityLike {
 }
 
 @Embeddable
-class CommunityLikeId implements Serializable {
+class PostLikeId implements Serializable {
     @Column(name = "user_id")
     private Long userId;
 

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "comment")
 @EntityListeners(AuditingEntityListener.class)
-public class CommunityComment {
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
@@ -31,5 +31,5 @@ public class CommunityComment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
-    private CommunityPost post;
+    private Post post;
 }
