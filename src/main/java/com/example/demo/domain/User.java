@@ -1,6 +1,7 @@
 package com.example.demo.domain;
 
 import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -12,6 +13,9 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 @EntityListeners(AuditingEntityListener.class)
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +30,19 @@ public class User {
 
     @Column(nullable = false, length = 100)
     private String name;
+
+    // 주소 관련 필드 (카카오 주소 API 연동)
+    @Column(name = "postal_code", length = 10)
+    private String postalCode;          // 우편번호
+
+    @Column(length = 500)
+    private String address;             // 기본 주소
+
+    @Column(nullable = false, length = 100)// 시/도
+    private String sido;
+
+    @Column(nullable = false, length = 100)// 시/군/구
+    private String sigungu;
 
     private String country;
     private Integer age;
@@ -53,7 +70,26 @@ public class User {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    // 연관관계
+    // 연관관계 (현재 구현된 기능만)
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList<>();
+    
+    // TODO: 각 기능 구현 시 추가 예정
+    // @OneToMany(mappedBy = "user")  
+    // private List<Comment> comments = new ArrayList<>();
+    //
+    // @OneToMany(mappedBy = "user")
+    // private List<PostLike> postLikes = new ArrayList<>();
+    //
+    // @OneToMany(mappedBy = "user")
+    // private List<ChatRoomParticipant> chatRoomParticipants = new ArrayList<>();
+    
+    // TODO: 회원탈퇴 기능 구현 시 추가
+    // public void delete() {
+    //     this.deletedAt = LocalDateTime.now();
+    // }
+    //
+    // public boolean isDeleted() {
+    //     return deletedAt != null;
+    // }
 }

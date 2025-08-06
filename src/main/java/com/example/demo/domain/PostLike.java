@@ -1,6 +1,10 @@
 package com.example.demo.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -11,6 +15,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "post_like")
 @EntityListeners(AuditingEntityListener.class)
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostLike {
     @EmbeddedId
     private PostLikeId id;
@@ -35,6 +42,9 @@ public class PostLike {
 }
 
 @Embeddable
+@Getter
+@Setter
+@NoArgsConstructor
 class PostLikeId implements Serializable {
     @Column(name = "user_id")
     private Long userId;
