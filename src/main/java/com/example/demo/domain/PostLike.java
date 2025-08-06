@@ -42,11 +42,6 @@ public class PostLike {
         this.createdAt = LocalDateTime.now();
     }
     
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
-    
     /**
      * 좋아요 취소 (Soft Delete)
      * updated_at을 현재 시간으로 설정하여 취소 상태로 표시
