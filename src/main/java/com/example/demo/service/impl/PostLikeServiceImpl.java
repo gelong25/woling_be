@@ -35,7 +35,7 @@ public class PostLikeServiceImpl implements PostLikeService {
     }
     
     @Override
-    public PostLikeResponse togglePostLike(Long postId, String userId) {
+    public PostLikeResponse togglePostLike(Long postId, Long userId) {
         try {
             // 사용자 조회
             User user = userRepository.findById(userId)

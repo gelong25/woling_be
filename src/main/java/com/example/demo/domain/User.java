@@ -20,8 +20,9 @@ import java.util.List;
 public class User {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private String userId;
+    private Long userId;
     
     @Column(nullable = false, unique = true, length = 50)
     private String email;
@@ -93,7 +94,9 @@ public class User {
      */
     public boolean isActive() {
         return deletedAt == null;
-
+    }
+    
+    /**
      * 회원 정보 업데이트
      */
     public void updateUserInfo(String name, String country, String language) {
