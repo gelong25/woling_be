@@ -15,11 +15,13 @@ public enum ErrorCode {
     
     RESOURCE_NOT_FOUND("R001", "요청한 리소스를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     USER_NOT_FOUND("R002", "사용자를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
-    POST_NOT_FOUND("R003", "게시글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    POST_NOT_FOUND("R003", "해당 게시글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     
-    UNAUTHORIZED_ACCESS("B001", "접근 권한이 없습니다.", HttpStatus.FORBIDDEN),
-    DUPLICATE_RESOURCE("B002", "이미 존재하는 리소스입니다.", HttpStatus.CONFLICT),
-    INVALID_OPERATION("B003", "유효하지 않은 작업입니다.", HttpStatus.BAD_REQUEST);
+    UNAUTHORIZED("B001", "로그인이 필요합니다.", HttpStatus.UNAUTHORIZED),
+    UNAUTHORIZED_ACCESS("B002", "접근 권한이 없습니다.", HttpStatus.FORBIDDEN),
+    DUPLICATE_RESOURCE("B003", "이미 존재하는 리소스입니다.", HttpStatus.CONFLICT),
+    INVALID_OPERATION("B004", "유효하지 않은 작업입니다.", HttpStatus.BAD_REQUEST),
+    INTERNAL_ERROR("B005", "좋아요 처리 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 
     private final String code;
     private final String message;
