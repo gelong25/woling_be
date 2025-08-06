@@ -29,11 +29,3 @@ public class ChatRoomParticipant {
     private LocalDateTime joinedAt;
 }
 
-@Embeddable
-class ChatRoomParticipantId implements Serializable {
-    @Column(name = "chat_room_id")
-    private Long chatRoomId;
-
-    @Column(name = "user_id")
-    private Long userId;
-}
