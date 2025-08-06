@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
     INTERNAL_SERVER_ERROR("C001", "서버 내부 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
     INVALID_INPUT_VALUE("C002", "잘못된 입력값입니다.", HttpStatus.BAD_REQUEST),
+    INVALID_INPUT("C006", "입력한 정보가 유효하지 않습니다.", HttpStatus.BAD_REQUEST),
     INVALID_REQUEST_BODY("C003", "요청 본문이 잘못되었습니다.", HttpStatus.BAD_REQUEST),
     MISSING_REQUIRED_PARAMETER("C004", "필수 파라미터가 누락되었습니다: %s", HttpStatus.BAD_REQUEST),
     INVALID_DATE_FORMAT("C005", "날짜 형식이 잘못되었습니다.", HttpStatus.BAD_REQUEST),
