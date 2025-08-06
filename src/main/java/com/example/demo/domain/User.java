@@ -4,7 +4,6 @@ import com.example.demo.exception.BusinessException;
 import com.example.demo.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +53,8 @@ public class User {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
     
+
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @Builder.Default
     private List<Post> posts = new ArrayList<>();
@@ -62,6 +63,7 @@ public class User {
     @Builder.Default
     private List<PostLike> postLikes = new ArrayList<>();
     
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
@@ -73,6 +75,25 @@ public class User {
     }
     
     /**
+     * 회원 탈퇴 (Soft Delete)
+     */
+    public void withdraw() {
+        this.deletedAt = LocalDateTime.now();
+    }
+    
+    /**
+     * 탈퇴 여부 확인
+     */
+    public boolean isDeleted() {
+        return deletedAt != null;
+    }
+    
+    /**
+     * 활성 상태 확인
+     */
+    public boolean isActive() {
+        return deletedAt == null;
+
      * 회원 정보 업데이트
      */
     public void updateUserInfo(String name, String country, String language) {
@@ -85,5 +106,6 @@ public class User {
         if (language != null) {
             this.language = language.trim().isEmpty() ? null : language.trim();
         }
+
     }
 }
