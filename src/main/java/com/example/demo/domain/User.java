@@ -1,9 +1,12 @@
 package com.example.demo.domain;
 
+import com.example.demo.exception.BusinessException;
+import com.example.demo.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 사용자 엔티티
@@ -50,6 +53,17 @@ public class User {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
     
+
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<Post> posts = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<PostLike> postLikes = new ArrayList<>();
+    
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
@@ -79,5 +93,19 @@ public class User {
      */
     public boolean isActive() {
         return deletedAt == null;
+
+     * 회원 정보 업데이트
+     */
+    public void updateUserInfo(String name, String country, String language) {
+        if (name != null && !name.trim().isEmpty()) {
+            this.name = name.trim();
+        }
+        if (country != null) {
+            this.country = country.trim().isEmpty() ? null : country.trim();
+        }
+        if (language != null) {
+            this.language = language.trim().isEmpty() ? null : language.trim();
+        }
+
     }
 }
