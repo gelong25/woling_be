@@ -24,26 +24,27 @@ public class User {
     @Column(name = "user_id")
     private String userId;
     
-    @Column(name = "user_name", nullable = false, length = 20)
-    private String userName;
-    
-    @Column(nullable = false, unique = true, length = 100)
+    @Column(nullable = false, unique = true, length = 50)
     private String email;
     
-    @Setter
-    @Column(name = "bank_name", length = 10)
-    private String bankName;
+    @Column(name = "name", nullable = false, length = 100)
+    private String name;
     
-    @Setter
-    @Column(name = "account_number", length = 30)
-    private String accountNumber;
+    @Column(length = 100)
+    private String country;
     
-    @Column(name = "profile_image_url", length = 255)
+    @Column
+    private int age;
+
+    @Column(name = "profile_image_url", length = 200)
     private String profileImageUrl;
     
     @Column(name = "gender_verified")
     private Boolean genderVerified;
     
+    @Column(length = 100)
+    private String language;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
     
@@ -72,20 +73,17 @@ public class User {
     }
     
     /**
-     * 계좌 정보 업데이트
+     * 회원 정보 업데이트
      */
-    public void updateAccountInfo(String bankName, String accountNumber) {
-        if (accountNumber != null && !accountNumber.matches("^[0-9]*$")) {
-            throw new BusinessException(ErrorCode.INVALID_INPUT_VALUE);
+    public void updateUserInfo(String name, String country, String language) {
+        if (name != null && !name.trim().isEmpty()) {
+            this.name = name.trim();
         }
-        this.bankName = bankName;
-        this.accountNumber = accountNumber;
-    }
-    
-    /**
-     * 프로필 이미지 업데이트
-     */
-    public void updateProfileImage(String profileImageUrl) {
-        this.profileImageUrl = profileImageUrl;
+        if (country != null) {
+            this.country = country.trim().isEmpty() ? null : country.trim();
+        }
+        if (language != null) {
+            this.language = language.trim().isEmpty() ? null : language.trim();
+        }
     }
 }
