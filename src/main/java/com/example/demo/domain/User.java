@@ -1,6 +1,7 @@
 package com.example.demo.domain;
 
 import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -12,6 +13,11 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 @EntityListeners(AuditingEntityListener.class)
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,18 +34,21 @@ public class User {
     private String name;
 
     private String country;
+
     private Integer age;
 
     @Column(name = "profile_image_url", length = 200)
     private String profileImageUrl;
 
     @Column(name = "gender_verified")
+    @Builder.Default
     private Boolean genderVerified = false;
 
     private String language;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "user_role")
+    @Builder.Default
     private UserRole userRole = UserRole.USER;
 
     @CreatedDate
@@ -53,7 +62,13 @@ public class User {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    // 연관관계
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Post> posts = new ArrayList<>();
+     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+     @Builder.Default
+     private List<Post> posts = new ArrayList<>();
+
+    // soft delete 확인 메서드
+    public boolean isActive() {
+        return deletedAt == null;
+    }
+
 }

@@ -1,15 +1,20 @@
 package com.example.demo.domain;
 
 import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "chat_room_participant")
 @EntityListeners(AuditingEntityListener.class)
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ChatRoomParticipant {
     @EmbeddedId
     private ChatRoomParticipantId id;
@@ -27,5 +32,5 @@ public class ChatRoomParticipant {
     @CreatedDate
     @Column(name = "joined_at")
     private LocalDateTime joinedAt;
-}
 
+}
