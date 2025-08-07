@@ -30,7 +30,7 @@ public class PostLikeController {
     @PostMapping("/{postId}/like")
     public ResponseEntity<ApiResponse<PostLikeResponse>> togglePostLike(
             @PathVariable Long postId,
-            @RequestHeader(value = "X-User-Id", required = false) String userId) {
+            @RequestHeader(value = "X-User-Id", required = false) Long userId) {
         
         // TODO: 실제 구현에서는 JWT 토큰에서 사용자 ID를 추출해야 함
         if (userId == null) {

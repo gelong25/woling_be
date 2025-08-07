@@ -23,10 +23,8 @@ public enum ErrorCode {
 
     USER_ALREADY_DELETED("B003", "이미 탈퇴한 회원입니다.", HttpStatus.BAD_REQUEST),
     DUPLICATE_RESOURCE("B004", "이미 존재하는 리소스입니다.", HttpStatus.CONFLICT),
-
-    DUPLICATE_RESOURCE("B003", "이미 존재하는 리소스입니다.", HttpStatus.CONFLICT),
-    INVALID_OPERATION("B004", "유효하지 않은 작업입니다.", HttpStatus.BAD_REQUEST),
-    INTERNAL_ERROR("B005", "좋아요 처리 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
+    INVALID_OPERATION("B005", "유효하지 않은 작업입니다.", HttpStatus.BAD_REQUEST),
+    INTERNAL_ERROR("B006", "좋아요 처리 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 
 
     private final String code;
