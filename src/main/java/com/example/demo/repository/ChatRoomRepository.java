@@ -18,11 +18,15 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Integer> {
             "WHERE cp1.user.userId = :userId " +
             "AND cp2.user.userId =:targetUserId")
     Optional<ChatRoom> findByParticipants(@Param("userId") Long userId,
-                                          @Param("targetUserId") Integer targetUserId);
+                                          @Param("targetUserId") Long targetUserId);
 
     @Query("SELECT DISTINCT cr " +
             "FROM ChatRoom cr " +
             "JOIN cr.participants cp " +
             "WHERE cp.user.userId = :userId")
-    List<ChatRoom> findByUserId(@Param("userId") Integer userId);
+    List<ChatRoom> findByUserId(@Param("userId") Long userId);
+
+    Optional<Object> findById(Long chatRoomId);
+
+    void deleteById(Long chatRoomId);
 }
