@@ -29,6 +29,10 @@ public class Post {
     @Column(columnDefinition = "TEXT")
     private String content;
     
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category", nullable = false)
+    private PostCategory category;
+    
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
     
@@ -64,12 +68,15 @@ public class Post {
     /**
      * 게시글 수정
      */
-    public void updatePost(String title, String content) {
+    public void updatePost(String title, String content, PostCategory category) {
         if (title != null && !title.trim().isEmpty()) {
             this.title = title;
         }
         if (content != null) {
             this.content = content;
+        }
+        if (category != null) {
+            this.category = category;
         }
     }
     

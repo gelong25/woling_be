@@ -25,6 +25,10 @@ public class VerifiedPost {
     @Column(length = 200)
     private String content;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category", nullable = false)
+    private VerifiedPostCategory category;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
@@ -54,6 +58,21 @@ public class VerifiedPost {
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
+    }
+    
+    /**
+     * 게시글 수정
+     */
+    public void updatePost(String title, String content, VerifiedPostCategory category) {
+        if (title != null && !title.trim().isEmpty()) {
+            this.title = title;
+        }
+        if (content != null) {
+            this.content = content;
+        }
+        if (category != null) {
+            this.category = category;
+        }
     }
     
     /**
