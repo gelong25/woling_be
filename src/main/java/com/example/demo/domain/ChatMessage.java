@@ -27,6 +27,10 @@ public class ChatMessage {
     @Column(name = "sent_at")
     private LocalDateTime sentAt;
 
+    @Column(name = "is_read", nullable = false)
+    @Builder.Default
+    private Boolean isRead = false;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
