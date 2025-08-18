@@ -24,15 +24,28 @@ public class ChatRoom {
     private Long chatRoomId;
 
     @CreatedDate
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<ChatMessage> messages = new ArrayList<>();
 
-    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<ChatRoomParticipant> participants = new ArrayList<>();
+
+    // 양방향 편의 메서드
+    // 채팅방에 메시지 추가
+    public void addMessage(ChatMessage message) {
+        messages.add(message);
+        message.setChatRoom(this);
+    }
+
+    // 채팅방에 참가자 추가
+    public void addParticipant(ChatRoomParticipant participant) {
+        participants.add(participant);
+        participant.setChatRoom(this);
+    }
 
 }
