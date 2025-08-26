@@ -7,53 +7,48 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 게시글 엔티티
- */
 @Entity
-@Table(name = "posts")
+@Table(name = "verified_posts")
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
-public class Post {
-    
+public class VerifiedPost {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private Long postId;
-    
-    @Column(nullable = false, length = 100)
+
+    @Column(length = 100)
     private String title;
-    
-    @Column(columnDefinition = "TEXT")
+
+    @Column(length = 200)
     private String content;
-    
+
     @Enumerated(EnumType.STRING)
     @Column(name = "category", nullable = false)
-    private PostCategory category;
-    
+    private VerifiedPostCategory category;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
-    
+
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
     
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
-    
-    // 연관관계 매핑
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
-    
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     @Builder.Default
-    private List<PostLike> postLikes = new ArrayList<>();
-    
+    private List<VerifiedComment> comments = new ArrayList<>();
+
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     @Builder.Default
-    private List<Comment> comments = new ArrayList<>();
+    private List<VerifiedLike> likes = new ArrayList<>();
     
     @PrePersist
     protected void onCreate() {
@@ -68,7 +63,7 @@ public class Post {
     /**
      * 게시글 수정
      */
-    public void updatePost(String title, String content, PostCategory category) {
+    public void updatePost(String title, String content, VerifiedPostCategory category) {
         if (title != null && !title.trim().isEmpty()) {
             this.title = title;
         }
@@ -85,22 +80,6 @@ public class Post {
      */
     public void delete() {
         this.deletedAt = LocalDateTime.now();
-    }
-    
-    /**
-     * 활성 좋아요 개수 조회 (취소되지 않은 좋아요만)
-     */
-    public int getActiveLikeCount() {
-        return postLikes != null ? 
-            (int) postLikes.stream().filter(PostLike::isActive).count() : 0;
-    }
-    
-    /**
-     * 특정 사용자의 활성 좋아요 여부 확인
-     */
-    public boolean isLikedBy(User user) {
-        return postLikes.stream()
-                .anyMatch(like -> like.getUser().equals(user) && like.isActive());
     }
     
     /**

@@ -9,8 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * 사용자 관련 API 컨트롤러
+/*** 사용자 관련 API 컨트롤러
  */
 @RestController
 @RequestMapping("/api/users")
@@ -20,23 +19,15 @@ public class UserController {
     
     private final UserService userService;
     
-    /**
-     * 회원 탈퇴 (Soft Delete)
-     */
-    @PostMapping("/me")
+    /** 회원 탈퇴 (Soft Delete) */
+    @DeleteMapping("/me")
     public ResponseEntity<ApiResponse<Void>> withdrawUser(
-            @RequestHeader("X-User-Id") String userId) {
+            @RequestHeader("X-User-Id") Long userId) {
         
         log.info("회원 탈퇴 API 호출: userId={}", userId);
-     * 회원 정보 수정
-     */
-    @PutMapping("/me")
-    public ResponseEntity<ApiResponse<Void>> updateUserInfo(
-            @RequestHeader("X-User-Id") String userId,
-            @RequestBody UserUpdateRequest request) {
         
         // 헤더 검증
-        if (userId == null || userId.trim().isEmpty()) {
+        if (userId == null) {
             throw new BusinessException(ErrorCode.UNAUTHORIZED);
         }
         
@@ -44,6 +35,19 @@ public class UserController {
         userService.withdrawUser(userId);
         
         return ResponseEntity.ok(ApiResponse.success("회원 탈퇴가 완료되었습니다.", null));
+    }
+    
+    /** 회원 정보 수정 */
+    @PutMapping("/me")
+    public ResponseEntity<ApiResponse<Void>> updateUserInfo(
+            @RequestHeader("X-User-Id") Long userId,
+            @RequestBody UserUpdateRequest request) {
+        
+        // 헤더 검증
+        if (userId == null) {
+            throw new BusinessException(ErrorCode.UNAUTHORIZED);
+        }
+        
         // 서비스 호출
         userService.updateUserInfo(userId, request);
         

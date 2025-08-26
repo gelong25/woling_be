@@ -14,5 +14,5 @@ public interface PostLikeService {
      * @param userId 사용자 ID
      * @return 좋아요 상태 및 개수
      */
-    PostLikeResponse togglePostLike(Long postId, String userId);
+    PostLikeResponse togglePostLike(Long postId, Long userId);
 }

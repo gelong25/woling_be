@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
 
-    public void withdrawUser(String userId) {
+    public void withdrawUser(Long userId) {
         log.info("회원 탈퇴 요청: userId={}", userId);
         
         // 활성 사용자 조회
@@ -50,8 +50,11 @@ public class UserServiceImpl implements UserService {
         user.withdraw();
         
         log.info("회원 탈퇴 완료: userId={}, deletedAt={}", userId, user.getDeletedAt());
-
-    public void updateUserInfo(String userId, UserUpdateRequest request) {
+    }
+    
+    @Override
+    @Transactional
+    public void updateUserInfo(Long userId, UserUpdateRequest request) {
         // 입력 검증
         validateUpdateRequest(request);
         

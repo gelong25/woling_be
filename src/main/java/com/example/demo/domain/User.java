@@ -4,7 +4,9 @@ import com.example.demo.exception.BusinessException;
 import com.example.demo.exception.ErrorCode;
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,30 +22,59 @@ import java.util.List;
 public class User {
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private String userId;
+    private Long userId;
     
     @Column(nullable = false, unique = true, length = 50)
     private String email;
-    
+
+    @Column(nullable = false, length = 50)
+    private String password;
+
     @Column(name = "name", nullable = false, length = 100)
     private String name;
     
-    @Column(length = 100)
-    private String country;
-    
+    @Column(nullable = false, length = 100)
+    private String country; // 국적
+
+    @Column(nullable = false)
+    private LocalDate birth;  // 생년월일
+
+    @Column(name = "region_name", length = 200)
+    private String regionName; // 전체 주소 ex) 서울시 강남구 ~~로 ~건물 ~~
+
+    @Column(name = "side_region_name", length = 200)
+    private String sideRegionName; // 부분 주소 ex) 서울시 강남구
+
+    @Column(nullable = false, name = "gender_verified")
+    private Boolean genderVerified; // OCR을 통한 성별 인증 여부
+
+
+    @Column(nullable = false, name = "has_child")
+    private Boolean hasChild; // 아이 여부 (선택적)
+
     @Column
-    private int age;
+    private String mbti; // 사용자 obti ( 선택적)
 
-    @Column(name = "profile_image_url", length = 200)
-    private String profileImageUrl;
-    
-    @Column(name = "gender_verified")
-    private Boolean genderVerified;
-    
-    @Column(length = 100)
-    private String language;
+    @Column
+    private String interests; // 관심사 ->(사용 안할듯)
 
+    @Column(name = "popularity_count")
+    @Builder.Default
+    private Integer popularityCount = 0; // 사용자 인기도
+
+    @Column(name = "reported_count")
+    @Builder.Default
+    private Integer reportedCount = 0; // 신고당한 횟수
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_role")
+    @Builder.Default
+    private UserRole userRole = UserRole.USER; // 사용자 권한: ADMIN(관리자) , USER(사용자)
+
+    //생성,수정,탈퇴 날짜
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
     
@@ -63,6 +94,46 @@ public class User {
     @Builder.Default
     private List<PostLike> postLikes = new ArrayList<>();
     
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<Comment> comments = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<VerifiedPost> verifiedPosts = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<VerifiedComment> verifiedComments = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<VerifiedLike> verifiedLikes = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<ChatMessage> chatMessages = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<ChatRoomParticipant> chatRoomParticipants = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<UserLanguage> userLanguages = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "reportedUser", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<Report> receivedReports = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "reporter", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<Report> submittedReports = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<UserAvailableTime> userAvailableTimes = new ArrayList<>();
+
 
     @PrePersist
     protected void onCreate() {
@@ -93,19 +164,38 @@ public class User {
      */
     public boolean isActive() {
         return deletedAt == null;
-
+    }
+    
+    /**
      * 회원 정보 업데이트
      */
-    public void updateUserInfo(String name, String country, String language) {
+    public void updateUserInfo(String name, String country) {
         if (name != null && !name.trim().isEmpty()) {
             this.name = name.trim();
         }
         if (country != null) {
             this.country = country.trim().isEmpty() ? null : country.trim();
         }
-        if (language != null) {
-            this.language = language.trim().isEmpty() ? null : language.trim();
-        }
-
+    }
+    
+    /**
+     * 신고 카운트 증가
+     */
+    public void increaseReportCount() {
+        this.reportedCount++;
+    }
+    
+    /**
+     * 신고 카운트 조회
+     */
+    public Integer getReportCount() {
+        return this.reportedCount;
+    }
+    
+    /**
+     * 현재 나이 계산
+     */
+    public int getAge() {
+        return Period.between(this.birth, LocalDate.now()).getYears();
     }
 }
